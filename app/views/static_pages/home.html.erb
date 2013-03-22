@@ -1,0 +1,13 @@
+<div class="center hero-unit">
+	<h1>Welcome to D20 Workshop</h1>
+
+	<h2>
+		A place for DMs and Players
+	</h2>
+
+	<% if current_user.nil? %>
+		<%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
+	<% end %>
+</div>
+
+<%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
