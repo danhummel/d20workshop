@@ -27,6 +27,8 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:characters) }
+  it { should respond_to(:feed) }
   
   it { should be_valid }
 
@@ -130,6 +132,40 @@ describe User do
   describe "remember token" do
     before { @user.save }
     its (:remember_token) { should_not be_blank }
+  end
+
+  describe "character associations" do
+
+    before { @user.save }
+    let!(:older_character) do 
+      FactoryGirl.create(:character, user: @user, created_at: 1.day.ago)
+    end
+    let!(:newer_character) do
+      FactoryGirl.create(:character, user: @user, created_at: 1.hour.ago)
+    end
+
+    it "should have the right characters in the right order" do
+      @user.characters.should == [newer_character, older_character]
+    end
+
+    it "should destroy associated characters" do
+      characters = @user.characters.dup
+      @user.destroy
+      characters.should_not be_empty
+      characters.each do |character|
+        Character.find_by_id(character.id).should be_nil
+      end
+    end
+
+    describe "status" do
+      let(:unfollowed_post) do
+        FactoryGirl.create(:character, user: FactoryGirl.create(:user))
+      end
+
+      its(:feed) { should include(newer_character) }
+      its(:feed) { should include(older_character) }
+      its(:feed) { should_not include(unfollowed_post) }
+    end
   end
 end
 

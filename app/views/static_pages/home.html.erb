@@ -1,13 +1,30 @@
-<div class="center hero-unit">
-	<h1>Welcome to D20 Workshop</h1>
+<% if signed_in? %>
+	<div class="row">
+		<aside class="span4">
+			<section>
+				<%= render 'shared/user_info' %>
+			</section>
+			<section>
+				<%= render 'shared/character_form' %>
+			</section>
+		</aside>
+		<div class="span8">
+			<h3>Latest Characters</h3>
+			<%= render 'shared/feed' %>
+		</div>
+	</div>
+<% else %>
+	<div class="center hero-unit">
+		<h1>Welcome to D20 Workshop</h1>
 
-	<h2>
-		A place for DMs and Players
-	</h2>
+		<h2>
+			A place for DMs and Players
+		</h2>
 
-	<% if current_user.nil? %>
-		<%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
-	<% end %>
-</div>
+		<% if current_user.nil? %>
+			<%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
+		<% end %>
+	</div>
 
-<%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
+	<%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
+<% end %>

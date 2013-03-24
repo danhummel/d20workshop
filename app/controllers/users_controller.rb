@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
 	def show
 		@user = User.find(params[:id])
+		@characters = @user.characters.paginate(page: params[:page])
 	end
 
 	def new
@@ -59,13 +60,6 @@ class UsersController < ApplicationController
 		def signed_in_redirect
 			flash[:error] = "Please logout before creating a new account."
 			redirect_to root_path
-		end
-
-		def signed_in_user
-			unless signed_in?
-				store_location
-				redirect_to signin_url, notice: "Please sign in." unless signed_in?
-			end
 		end
 
 		def correct_user
